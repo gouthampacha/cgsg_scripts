@@ -14,11 +14,12 @@
 
     $xml = produce_XML_object_tree($data);
 
-    $count = 0;
+    $count = 1;
      
     foreach($xml->channel->item as $entry) {
     	    // Allowing only 4 posts in the feed
        		if($count > 4) break;
+       		else $count++;
             
        		$img_src = "";
 
@@ -34,29 +35,22 @@
             	   	}
             }
 
-            //Strip the htmlspecialchars induced
-            $pattern = '/&([#0-9A-Za-z]+);/';
-			$img_link = preg_replace($pattern, '', $img_src[1]);
-
-           	echo "<ul>";
             echo "<li>";
                echo "<a href='".$entry->link."' title='"."$entry->title'>";
-                if($img_src[1] != "") {
+                if(isset($img_src[1]) && $img_src[1] != "") {
+                	    //Strip the htmlspecialchars induced
+            			$pattern = '/&([#0-9A-Za-z]+);/';
+						$img_link = preg_replace($pattern, '', $img_src[1]);
 					echo  "<img  src= $img_link alt='$entry->title' height='187px' width='340px'>";
                 } else {
                     echo "<img alt='' src='http://www.clemson.edu/students/cgsg/global/images/GSGLogo-Orange.jpeg' height='187px' width='340px'>"; 
                 }
-                
-            echo "</li>";
-           echo "</ul>";
-           echo "<p class='last'>" . $entry->title . "</p>";
-           echo "</a>";
-
-        	$count++;
-        
+             echo "<p class='last'>" . $entry->title . "</p>";
+             echo "</a>";
+			 echo "</li>";
     }
 
-
+    echo "<ul></ul>";
 
     //Function to produce XML tree without dumping errors to the page
     function produce_XML_object_tree($raw_XML) {
