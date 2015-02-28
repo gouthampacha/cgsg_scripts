@@ -30,16 +30,19 @@
             foreach ($desc as $cell) {
             	if (substr($cell, 0, 3) == "src"){
             	        $img_src = explode('=', $cell);
+            	        break;
             	   	}
             }
 
-            echo "Here";
-       		
+            //Strip the htmlspecialchars induced
+            $pattern = '/&([#0-9A-Za-z]+);/';
+			$img_link = preg_replace($pattern, '', $img_src[1]);
+
            	echo "<ul>";
             echo "<li>";
                echo "<a href='".$entry->link."' title='"."$entry->title'>";
-                if($img_src != "") {
-                    echo "<img alt='Testing Image' src=". (string) $img_src[1] . " height='187px' width='340px'>";
+                if($img_src[1] != "") {
+					echo  "<img  src= $img_link alt='$entry->title' height='187px' width='340px'>";
                 } else {
                     echo "<img alt='' src='http://www.clemson.edu/students/cgsg/global/images/GSGLogo-Orange.jpeg' height='187px' width='340px'>"; 
                 }
